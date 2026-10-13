@@ -1,0 +1,45 @@
+# Local secrets and configuration
+.env
+.env.*
+!.env.example
+secrets/
+.secrets/
+*.key
+*.pem
+
+# Runtime / QQ login and chat data
+data/
+runtime/
+logs/
+napcat-data/
+astrbot-data/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.session
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# Node / Vue
+node_modules/
+dist/
+coverage/
+
+# .NET
+bin/
+obj/
+
+# Local IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
