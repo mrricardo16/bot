@@ -1,0 +1,24 @@
+{
+  "groups": {
+    "123456789": {"mode": "observe", "capture_enabled": true}
+  },
+  "rules": [
+    {
+      "id": "bot_checkin",
+      "enabled": true,
+      "priority": 50,
+      "scope": ["123456789"],
+      "match": {"type": "exact", "value": "猫猫出列"},
+      "action": {"type": "fixed_reply", "text": "在。"},
+      "cooldown_seconds": 120
+    },
+    {
+      "id": "team_hint_deltaforce",
+      "enabled": true,
+      "priority": 10,
+      "scope": ["123456789"],
+      "match": {"type": "contains_all", "any_groups": [["三角洲", "烽火"], ["组队", "开车", "有人玩"]]},
+      "action": {"type": "silent_capture", "event_type": "team_intent", "game": "delta_force", "ttl_hours": 48}
+    }
+  ]
+}

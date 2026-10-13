@@ -1,35 +1,35 @@
 # QQ SmartBot
 
-普通 QQ 账号接入的混合型 AI 聊天机器人（项目初始化阶段）。
+普通 QQ 专用账号 + NapCat / OneBot v11 + AstrBot 的群聊混合机器人项目。
 
-## 架构约束
-- 普通 QQ 账号通过 NapCat / OneBot v11 接入；AstrBot 提供模型、会话和插件能力。
-- 普通群消息先由本地规则路由处理，未命中规则时不得调用 LLM。
-- `@机器人` 用于 AI 对话；`!` 前缀用于确定性指令；无 @ 的关键词可触发固定动作或被动事件捕获。
-- 动态规则配置与实际运行数据必须分离：仓库只管理默认配置、模板和代码，运行时配置保存于本地数据库。
-- 本仓库目前**仅为目录骨架**，尚未实现 QQ 接入或任何业务功能。
+**阶段：P0/P1 离线代码完成，真实 QQ 接入与模型隔离尚未验收。**
 
-## 目录职责
-| 目录 | 用途 |
-|---|---|
-| `doc/` | 需求、架构、技术决策、开发、测试与部署文档 |
-| `astrbot_plugin_qq_smartbot/` | 自研 AstrBot 插件及其各业务模块 |
-| `configs/` | 可提交的默认配置和示例；不存放生产密钥 |
-| `deploy/` | 本地 / Docker 部署模板与启动说明 |
-| `tests/` | 单元、集成和端到端测试 |
-| `scripts/` | 本地维护及开发辅助脚本 |
-| `web/` | 预留：Vue 3 配置管理后台 |
-| `services/` | 预留：ASP.NET Core Agent 工具服务 |
+## 目录
 
-插件内部约定：
-- `router/`：消息标准化、路由与优先级
-- `rules/`：匹配规则、热更新、冷却机制
-- `commands/`：`!roll`、`!choose` 等指令
-- `events/`：被动事件、活动线索、状态机
-- `ai/`：AI 人格、会话与上下文适配
-- `agent/`：授权工具和任务执行适配
-- `storage/`：SQLite 数据访问与迁移
-- `security/`：群白名单、权限与审计
+- `doc/`：需求、架构、ADR、自评审、开发计划、测试与部署文档（唯一文档目录）
+- `astrbot_plugin_qq_smartbot/`：独立 AstrBot 插件子项目
+- `configs/`：示例规则，实际群 ID/配置不入库
+- `tests/unit/`：无需 AstrBot/QQ 的纯 Python 单元测试
+- `web/`、`services/`：仅预留，尚无代码
 
-## 安全约束
-仓库当前为公开仓库。禁止提交 QQ 登录态、NapCat Token、模型 API Key、真实聊天记录、运行数据库及生产环境配置。以上内容必须留在仓库外的运行环境中。
+## 本期能力
+
+- 白名单默认拒绝、仅处理 OneBot v11 群事件
+- `@` 由类型化 At 段确认后交给 AstrBot AI，其它无规则消息明确 stop_event
+- `!roll`、`!choose`、`!help` 本地指令
+- 按群模式匹配 exact/contains_all 规则；被动活动线索只写 candidate
+- JSON 文件热加载、类型验证、SQLite 幂等和有限数据存储
+
+## 离线测试
+
+```sh
+python -m pip install pytest
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/unit -q
+```
+
+Windows PowerShell 可直接执行 `python -m pytest tests/unit -q`。
+
+## 部署与安全
+
+请先阅读 `doc/deployment/LOCAL.md`。仅部署插件子目录，不要把 Monorepo 根目录当成插件。
+运行前必须设置 `SMARTBOT_GROUP_IDS`；默认为空，拒绝所有群消息。不准提交真实 QQ 登录态、API Key、Token、聊天记录或 SQLite 数据库。NapCat 属于非官方 QQ 接入，可能受到账号风控。

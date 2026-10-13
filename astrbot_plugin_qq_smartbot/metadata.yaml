@@ -1,0 +1,8 @@
+name: astrbot_plugin_qq_smartbot
+display_name: QQ SmartBot Router
+desc: 仅针对明确授权 QQ 群运行的本地消息路由、指令与被动事件捕获
+version: 0.1.0
+author: mrricardo16
+repo: https://github.com/mrricardo16/bot
+support_platforms:
+  - aiocqhttp

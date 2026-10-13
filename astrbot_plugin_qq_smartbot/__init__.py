@@ -1,0 +1,1 @@
+"""QQ SmartBot AstrBot plugin."""
