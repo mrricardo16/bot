@@ -1,0 +1,24 @@
+name: SmartBot unit tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python -m pip install pytest
+      - name: Check source syntax
+        run: python -m compileall -q astrbot_plugin_qq_smartbot
+      - name: Run unit tests
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+        run: python -m pytest tests/unit -q
